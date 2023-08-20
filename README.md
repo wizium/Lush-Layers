@@ -14,10 +14,13 @@ Welcome to my Flutter wallpaper app practice project! 🚀 This project is desig
 - **Practice and Learning:** This project has allowed me to enhance my Flutter skills and deepen my understanding of UI/UX design principles.
 
 ## Screenshots
+<p <img src="https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/4fc21bce-a841-45f4-a59a-bfff751b9bcf" alt="App Screenshot" width="300"/>
+</p>
+<p <img src="https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/12135761-3fbf-41de-89c1-d39bfb2124a1" alt="App Screenshot" width="300"/>
+</p>
+<p <img src="https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/df744c42-06b0-495e-b81f-93797e1136a1" alt="App Screenshot" width="300"/>
+</p>
 
-![Screenshot](https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/4fc21bce-a841-45f4-a59a-bfff751b9bcf)
-![Screenshot](https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/12135761-3fbf-41de-89c1-d39bfb2124a1)
-![Screenshot](https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/df744c42-06b0-495e-b81f-93797e1136a1)
 
 
 ## Getting Started
