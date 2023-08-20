@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/ABUBAKARL/wallpaper_app/blob/main/assets/100074117/a9d2948c-fac2-41b2-b9fe-b8a7263982c0.png" alt="App Screenshot" width="300"/>
+  <img src="https://github.com/ABUBAKARL/wallpaper_app/blob/main/assets/100074117/a9d2948c-fac2-41b2-b9fe-b8a7263982c0" alt="App Screenshot" width="300"/>
 </p>
 
 ## Welcome to my Flutter Wallpaper App Practice Project! 🚀
