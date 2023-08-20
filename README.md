@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/ABUBAKARL/wallpaper_app/raw/main/assets/100074117/a9d2948c-fac2-41b2-b9fe-b8a7263982c0.png" alt="App Screenshot" width="300"/>
+  <img src="https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/f5c77c62-ae5a-4090-8b18-cbec856e6bad" alt="App Screenshot" width="300"/>
 </p>
 
 ## Welcome to my Flutter Wallpaper App Practice Project! 🚀
@@ -16,9 +16,9 @@ This project showcases my skills in Flutter development and UI/UX design. While 
 ### Screenshots
 
 <p align="center">
-  <img src="https://github.com/ABUBAKARL/wallpaper_app/raw/main/assets/100074117/4fc21bce-a841-45f4-a59a-bfff751b9bcf.png" alt="Screenshot 1" width="300"/>
-  <img src="https://github.com/ABUBAKARL/wallpaper_app/raw/main/assets/100074117/12135761-3fbf-41de-89c1-d39bfb2124a1.png" alt="Screenshot 2" width="300"/>
-  <img src="https://github.com/ABUBAKARL/wallpaper_app/raw/main/assets/100074117/df744c42-06b0-495e-b81f-93797e1136a1.png" alt="Screenshot 3" width="300"/>
+  <img src="https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/4fc21bce-a841-45f4-a59a-bfff751b9bcf" alt="Screenshot 1" width="300"/>
+  <img src="https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/12135761-3fbf-41de-89c1-d39bfb2124a1" alt="Screenshot 2" width="300"/>
+  <img src="https://github.com/ABUBAKARL/wallpaper_app/assets/100074117/df744c42-06b0-495e-b81f-93797e1136a1" alt="Screenshot 3" width="300"/>
 </p>
 
 ### Getting Started
