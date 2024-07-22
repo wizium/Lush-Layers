@@ -1,9 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:wallpaper_app/theme.dart';
 import 'package:wallpaper_app/utils/fetch_code.dart';
-import '/main.dart';
 import 'wallpaper_preview.dart';
 
 late ResponseData responseData;
@@ -18,10 +21,6 @@ class AllWallpapers extends StatefulWidget {
 
 class _AllWallpapersState extends State<AllWallpapers>
     with AutomaticKeepAliveClientMixin<AllWallpapers> {
-  Future<void> hello() async {
-    setState(() {});
-  }
-
   @override
   bool get wantKeepAlive => true;
   @override
@@ -35,79 +34,91 @@ class _AllWallpapersState extends State<AllWallpapers>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.title!,
-          style: Theme.of(context).textTheme.headlineLarge,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            Iconsax.arrow_right_3,
+            color: Theme.of(context).colorScheme.surface,
+          ),
         ),
+        title: Text(widget.title!),
       ),
-      body: RefreshIndicator(
-        onRefresh: () {
-          return hello();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: FutureBuilder(
-            future: responseData.fetch(parameter: widget.title!),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return GridView.builder(
-                  itemCount: snapshot.data!.photosList!.length,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: width * .33,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    mainAxisExtent: height * .27,
-                  ),
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return PreviewWallpaper(
-                                model: snapshot.data!.photosList![index],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: gPadding),
+        child: FutureBuilder(
+          future: responseData.fetch(parameter: widget.title!),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return GridView.builder(
+                itemCount: snapshot.data!.photosList!.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: .7,
+                ),
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return PreviewWallpaper(
+                              model: snapshot.data!.photosList![index],
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        // height: 190,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(.5),
+                        ),
+                        child: Image.network(
+                          snapshot.data!.photosList![index].thumbnail,
+                          fit: BoxFit.cover,
+                          gaplessPlayback: true,
+                          frameBuilder:
+                              (context, child, frame, wasSynchronouslyLoaded) {
+                            return child;
+                          },
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(
+                                  color: Colors.white,
+                                ),
                               );
-                            },
-                          ),
-                        );
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(.5),
-                          ),
-                          child: Image.network(
-                            snapshot.data!.photosList![index].thumbnail,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              } else {
-                                return Center(
-                                  child:
-                                      LoadingAnimationWidget.staggeredDotsWave(
-                                    color: Colors.red,
-                                    size: 70,
-                                  ),
-                                );
-                              }
-                            },
-                          ),
+                            }
+                          },
                         ),
                       ),
-                    );
-                  },
-                );
-              } else {
-                return Center(
-                  child: LoadingAnimationWidget.staggeredDotsWave(
-                      color: Colors.green, size: 100),
-                );
-              }
-            },
-          ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              return Center(
+                child: LoadingAnimationWidget.discreteCircle(
+                  color: Colors.pink,
+                  thirdRingColor: Colors.orange,
+                  size: 100,
+                ),
+              );
+            }
+          },
         ),
       ),
     );

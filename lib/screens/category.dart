@@ -15,6 +15,7 @@ class _HomeState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: Text(
           "CATEGORY",
@@ -26,14 +27,14 @@ class _HomeState extends State<Categories> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: height * .08,
+            height: 45,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: wallpaperCategories.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
+                    horizontal: 5,
                   ),
                   child: InkWell(
                     onTap: () {
@@ -50,11 +51,7 @@ class _HomeState extends State<Categories> {
                       );
                     },
                     child: Chip(
-                      backgroundColor: Colors.white,
-                      label: Text(
-                        wallpaperCategories[index],
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                      label: Text(wallpaperCategories[index]),
                     ),
                   ),
                 );

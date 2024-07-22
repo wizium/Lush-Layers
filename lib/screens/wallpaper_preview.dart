@@ -1,13 +1,12 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:async_wallpaper/async_wallpaper.dart';
+import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:wallpaper_app/theme.dart';
 import '/models/response_model.dart';
-import '/main.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 
 class PreviewWallpaper extends StatefulWidget {
   final PhotosModel model;
@@ -18,182 +17,705 @@ class PreviewWallpaper extends StatefulWidget {
 }
 
 class _PreviewWallpaperState extends State<PreviewWallpaper> {
-  bool isDownloaded = false;
+  bool isVisible = true;
+
   @override
   void initState() {
-    // Make the system UI mode transparent when the widget is initialized
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   @override
   void dispose() {
-    // Restore the system UI mode when the widget is disposed
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Image.network(
-            widget.model.portraitLink,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) {
-                return child;
-              } else {
-                return Center(
-                  child: LoadingAnimationWidget.staggeredDotsWave(
-                    color: Colors.green,
-                    size: 100,
-                  ),
-                );
-              }
-            },
-            height: height,
-            width: width,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    iconSize: 30,
-                    color: Colors.red,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.close_rounded),
-                  ),
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          body: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              InkWell(
+                child: Image.network(
+                  widget.model.portraitLink,
+                  gaplessPlayback: true,
+                  frameBuilder:
+                      (context, child, frame, wasSynchronouslyLoaded) {
+                    return child;
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return Center(
+                        child: LoadingAnimationWidget.threeRotatingDots(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          size: 100,
+                        ),
+                      );
+                    }
+                  },
+                  height: double.infinity,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
-                SizedBox(
-                  width: width * .75,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton.filled(
-                          iconSize: 40,
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return SimpleDialog(
-                                  contentPadding: const EdgeInsets.all(20),
-                                  title: Text(
-                                    widget.model.name,
-                                  ),
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: Image(
-                                        image: NetworkImage(
-                                          widget.model.thumbnail,
+                onTap: () {
+                  isVisible = !isVisible;
+                  setState(() {});
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Visibility(
+                  visible: isVisible,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(
+                            Iconsax.arrow_left_2,
+                            color: Theme.of(context).colorScheme.surface,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .inversePrimary
+                                  .withOpacity(.5),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            height: 150,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: BackdropFilter(
+                                filter:
+                                    ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: gPadding,
+                                      vertical: 20,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 7),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Free Wallpaper",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge!
+                                                    .merge(
+                                                      const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    "1720 x 3480",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge!
+                                                        .merge(
+                                                          const TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                  ),
+                                                  const SizedBox(width: 20),
+                                                  Text(
+                                                    "JPG",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge!
+                                                        .merge(
+                                                          const TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        height: height * .35,
-                                        fit: BoxFit.cover,
-                                      ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                CupertinoIcons
+                                                    .arrowshape_turn_up_right,
+                                                size: 25,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                isVisible = false;
+                                                setState(() {});
+                                                showModalBottomSheet(
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  barrierColor:
+                                                      Colors.transparent,
+                                                  enableDrag: false,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return BottomSheet(
+                                                      enableDrag: false,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      onClosing: () {},
+                                                      builder: (context) {
+                                                        return Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              .38,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .all(
+                                                                  gPadding),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .inversePrimary
+                                                                .withOpacity(
+                                                                    .5),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                              20,
+                                                            ),
+                                                          ),
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                            child:
+                                                                BackdropFilter(
+                                                              filter:
+                                                                  ImageFilter
+                                                                      .blur(
+                                                                sigmaX: 20.0,
+                                                                sigmaY: 20.0,
+                                                              ),
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        20.0),
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Row(
+                                                                      children: [
+                                                                        Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Text(
+                                                                              "Info",
+                                                                              style: Theme.of(context).textTheme.titleLarge!.merge(
+                                                                                    const TextStyle(
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                      color: Colors.white,
+                                                                                    ),
+                                                                                  ),
+                                                                            ),
+                                                                            const SizedBox(height: 5),
+                                                                            Text(
+                                                                              "Type",
+                                                                              style: Theme.of(context).textTheme.bodyLarge!.merge(
+                                                                                    const TextStyle(
+                                                                                      color: Colors.white,
+                                                                                    ),
+                                                                                  ),
+                                                                            ),
+                                                                            const SizedBox(height: 5),
+                                                                            Text(
+                                                                              "Resolution",
+                                                                              style: Theme.of(context).textTheme.bodyLarge!.merge(
+                                                                                    const TextStyle(
+                                                                                      color: Colors.white,
+                                                                                    ),
+                                                                                  ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        const SizedBox(
+                                                                            width:
+                                                                                30),
+                                                                        Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Text(
+                                                                              "",
+                                                                              style: Theme.of(context).textTheme.titleLarge!.merge(
+                                                                                    const TextStyle(
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                      color: Colors.white,
+                                                                                    ),
+                                                                                  ),
+                                                                            ),
+                                                                            const SizedBox(height: 5),
+                                                                            Text(
+                                                                              "JPG",
+                                                                              style: Theme.of(context).textTheme.bodyLarge!.merge(
+                                                                                    const TextStyle(
+                                                                                      color: Colors.white,
+                                                                                    ),
+                                                                                  ),
+                                                                            ),
+                                                                            const SizedBox(height: 5),
+                                                                            Text(
+                                                                              "1720 x 3840",
+                                                                              style: Theme.of(context).textTheme.bodyLarge!.merge(
+                                                                                    const TextStyle(
+                                                                                      color: Colors.white,
+                                                                                    ),
+                                                                                  ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    const Divider(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      thickness:
+                                                                          .5,
+                                                                    ),
+                                                                    Text(
+                                                                      "Colors",
+                                                                      style: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .titleLarge!
+                                                                          .merge(
+                                                                            const TextStyle(
+                                                                              fontWeight: FontWeight.bold,
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                          ),
+                                                                    ),
+                                                                    Text(
+                                                                      "Tap to copy color",
+                                                                      style: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .bodyLarge!
+                                                                          .merge(
+                                                                            const TextStyle(
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                          ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                        height:
+                                                                            5),
+                                                                    GridView
+                                                                        .builder(
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      physics:
+                                                                          const NeverScrollableScrollPhysics(),
+                                                                      gridDelegate:
+                                                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                        crossAxisCount:
+                                                                            3,
+                                                                        childAspectRatio:
+                                                                            2.5,
+                                                                        crossAxisSpacing:
+                                                                            5,
+                                                                        mainAxisSpacing:
+                                                                            5,
+                                                                      ),
+                                                                      itemCount:
+                                                                          6,
+                                                                      itemBuilder:
+                                                                          (
+                                                                        context,
+                                                                        index,
+                                                                      ) {
+                                                                        return InkWell(
+                                                                          onTap:
+                                                                              () {
+                                                                            Clipboard.setData(
+                                                                              ClipboardData(
+                                                                                text: widget.model.portraitLink,
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                          child:
+                                                                              Container(
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Colors.red,
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                30,
+                                                                              ),
+                                                                            ),
+                                                                            child:
+                                                                                const Center(
+                                                                              child: Text(
+                                                                                "#000000",
+                                                                                style: TextStyle(
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                Icons.info_outline_rounded,
+                                                size: 25,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                CupertinoIcons
+                                                    .arrow_down_circle,
+                                                size: 25,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                isVisible = false;
+                                                setState(() {});
+                                                showModalBottomSheet(
+                                                  barrierColor:
+                                                      Colors.transparent,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  enableDrag: false,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return Container(
+                                                      margin:
+                                                          const EdgeInsets.all(
+                                                              gPadding),
+                                                      height: Get.height * .25,
+                                                      width: Get.width,
+                                                      decoration: BoxDecoration(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .inversePrimary
+                                                            .withOpacity(.5),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                          20,
+                                                        ),
+                                                      ),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        child: BackdropFilter(
+                                                          filter:
+                                                              ImageFilter.blur(
+                                                            sigmaX: 20.0,
+                                                            sigmaY: 20.0,
+                                                          ),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(20.0),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(
+                                                                      "Remix Wallpaper",
+                                                                      style: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .titleLarge!,
+                                                                    ),
+                                                                    const Icon(Icons
+                                                                        .refresh_rounded)
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    const Icon(
+                                                                      Iconsax
+                                                                          .colorfilter,
+                                                                    ),
+                                                                    Slider(
+                                                                        value:
+                                                                            1,
+                                                                        onChanged:
+                                                                            (value) {})
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    const Icon(
+                                                                      Icons
+                                                                          .blur_on_rounded,
+                                                                    ),
+                                                                    Slider(
+                                                                        value:
+                                                                            1,
+                                                                        onChanged:
+                                                                            (value) {})
+                                                                  ],
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                CupertinoIcons.paintbrush,
+                                                size: 25,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                CupertinoIcons.heart,
+                                                size: 25,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8),
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  child: FloatingActionButton(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              40),
+                                                    ),
+                                                    onPressed: () async {
+                                                      Get.dialog(
+                                                        Dialog(
+                                                          backgroundColor: Theme
+                                                                  .of(context)
+                                                              .colorScheme
+                                                              .inversePrimary,
+                                                          child: Container(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .all(20),
+                                                            height: 300,
+                                                            width: Get.width,
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .wallpaper_rounded,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .primary,
+                                                                  size: 35,
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 10),
+                                                                Text(
+                                                                  "Set wallpaper on",
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .headlineSmall,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(10)
+                                                                  ),
+                                                                  height: 60,
+                                                                  width:
+                                                                      Get.width,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    onPressed:
+                                                                        () {},
+                                                                    child:
+                                                                        const Text(
+                                                                      "Home Screen",
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 10),
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(10)
+                                                                  ),
+                                                                  height: 60,
+                                                                  width:
+                                                                      Get.width,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    onPressed:
+                                                                        () {},
+                                                                    child:
+                                                                        const Text(
+                                                                      "Lock Screen",
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 10),
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(10)
+                                                                  ),
+                                                                  height: 60,
+                                                                  width:
+                                                                      Get.width,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    onPressed:
+                                                                        () {},
+                                                                    child:
+                                                                        const Text(
+                                                                      "Both",
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: const Icon(
+                                                      CupertinoIcons.share,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 10,
-                                      ),
-                                      child: Text(
-                                        "Photo by ${widget.model.photoGrapher}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge,
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        "Ok",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium,
-                                      ),
-                                    )
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.info_outline_rounded,
-                            color: Colors.white,
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                              Colors.grey.withOpacity(.5),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                        IconButton.filled(
-                          iconSize: 50,
-                          onPressed: () async {
-                            if (isDownloaded) {
-                              Get.snackbar("Already Downloaded", "🤨");
-                            } else {
-                              isDownloaded = (await GallerySaver.saveImage(
-                                widget.model.portraitLink,
-                              ))!;
-                              if (isDownloaded) {
-                              Get.snackbar("Downloaded", "🎉");
-
-                              } else {
-                                Get.snackbar("Download Failed", "😭");
-                              }
-                            }
-
-                            setState(() {});
-                          },
-                          icon: Icon(
-                            isDownloaded
-                                ? Icons.download_done_rounded
-                                : Icons.downloading_rounded,
-                            color: Colors.white,
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                              Colors.grey.withOpacity(.5),
-                            ),
-                          ),
-                        ),
-                        IconButton.filled(
-                          iconSize: 40,
-                          onPressed: () async {
-                            await AsyncWallpaper.setWallpaperNative(
-                              url: widget.model.portraitLink,
-                            );
-                          },
-                          icon: const Icon(Icons.wallpaper_rounded),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                              Colors.grey.withOpacity(.5),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+              ),
+            ],
+          ),
+        );
   }
 }
