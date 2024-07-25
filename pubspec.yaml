@@ -45,6 +45,7 @@ dependencies:
   shimmer: ^3.0.0
   parallax_cards: ^1.0.2
   lottie: ^3.0.0
+  json_theme: ^6.5.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

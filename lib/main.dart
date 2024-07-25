@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:wallpaper_app/theme.dart';
+import 'package:json_theme/json_theme.dart';
 import 'Data/categories.dart';
 import 'models/image_list.dart';
 import 'screens/home.dart';
@@ -9,8 +12,20 @@ ImageListMethods imageList = ImageListMethods(images: imagesList);
 ImageListMethods recommendedImage = ImageListMethods(images: recommendedImages);
 late double height;
 late double width;
-void main(List<String> args) {
+ThemeData? ligthTheme;
+ThemeData? darkTheme;
+
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final lThemeStr = await rootBundle.loadString('assets/light_theme.json');
+  final lThemeJson = jsonDecode(lThemeStr);
+  ligthTheme = ThemeDecoder.decodeThemeData(lThemeJson)!;
+  final dThemeStr = await rootBundle.loadString('assets/dark_theme.json');
+  final dThemeJson = jsonDecode(dThemeStr);
+  darkTheme = ThemeDecoder.decodeThemeData(dThemeJson)!;
+
   runApp(const MyApp());
+
   recommendedImage.initialize();
   imageList.initialize();
 }
@@ -27,76 +42,8 @@ class _MyAppState extends State<MyApp> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return GetMaterialApp(
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: pColor,
-          brightness: Brightness.dark,
-        ),
-        iconButtonTheme: const IconButtonThemeData(
-          style: ButtonStyle(
-            elevation: WidgetStatePropertyAll(1),
-            foregroundColor: WidgetStatePropertyAll(Colors.white),
-          ),
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          foregroundColor: ColorScheme.fromSeed(
-            seedColor: pColor,
-            brightness: Brightness.dark,
-          ).inversePrimary,
-          backgroundColor: ColorScheme.fromSeed(
-            seedColor: pColor,
-            brightness: Brightness.dark,
-          ).primary,
-        ),
-        chipTheme: ChipThemeData(
-          elevation: 6,
-          shadowColor: ColorScheme.fromSeed(
-            seedColor: pColor,
-            brightness: Brightness.dark,
-          ).inversePrimary.withOpacity(.4),
-          side: BorderSide(
-            color: ColorScheme.fromSeed(
-              seedColor: pColor,
-              brightness: Brightness.dark,
-            ).inversePrimary.withOpacity(.2),
-          ),
-        ),
-      ),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: pColor,
-          brightness: Brightness.light,
-        ),
-        iconButtonTheme: const IconButtonThemeData(
-          style: ButtonStyle(
-            elevation: WidgetStatePropertyAll(1),
-            foregroundColor: WidgetStatePropertyAll(Colors.white),
-          ),
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          foregroundColor: ColorScheme.fromSeed(
-            seedColor: pColor,
-            brightness: Brightness.light,
-          ).inversePrimary,
-          backgroundColor: ColorScheme.fromSeed(
-            seedColor: pColor,
-            brightness: Brightness.light,
-          ).primary,
-        ),
-        chipTheme: ChipThemeData(
-          elevation: 6,
-          shadowColor: ColorScheme.fromSeed(
-            seedColor: pColor,
-            brightness: Brightness.light,
-          ).inversePrimary.withOpacity(.4),
-          side: BorderSide(
-            color: ColorScheme.fromSeed(
-              seedColor: pColor,
-              brightness: Brightness.light,
-            ).inversePrimary.withOpacity(.2),
-          ),
-        ),
-      ),
+      darkTheme: darkTheme,
+      theme: ligthTheme,
       themeMode: ThemeMode.dark,
       home: const Home(),
       debugShowCheckedModeBanner: false,

@@ -7,12 +7,12 @@ import '/models/get_controllers.dart';
 import 'package:wallpaper_app/utils/fetch_code.dart';
 import 'all_wallpapers.dart';
 import 'category.dart';
-import 'me.dart';
+import 'settings.dart';
 
 List screens = [
   AllWallpapers(title: "Wallpaper Android", requestType: RequestType.curated),
   const Categories(),
-  const Settings(),
+  const SettingsScreen(),
 ];
 
 class Home extends StatefulWidget {
@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
           ),
           const Categories(),
           const DesktopWallpapers(),
-          const Settings()
+          const SettingsScreen()
         ],
         onPageChanged: (index) {
           navigationController.selectedIndex!.value = index;
