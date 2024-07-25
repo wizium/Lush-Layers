@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -55,8 +56,8 @@ class _HomeState extends State<Home> {
             requestType: RequestType.curated,
           ),
           const Categories(),
-          ParallaxScreen(),
-          // const Settings()
+          const DesktopWallpapers(),
+          const Settings()
         ],
         onPageChanged: (index) {
           navigationController.selectedIndex!.value = index;
@@ -119,6 +120,22 @@ class _HomeState extends State<Home> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   color: navigationController.selectedIndex!.value == 2
+                      ? Theme.of(context).colorScheme.primary
+                      : null,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 3,
+                ),
+                child: const Icon(CupertinoIcons.device_desktop),
+              ),
+              label: "Desktop",
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  color: navigationController.selectedIndex!.value == 3
                       ? Theme.of(context).colorScheme.primary
                       : null,
                 ),

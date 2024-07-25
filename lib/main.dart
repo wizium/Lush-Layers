@@ -28,7 +28,6 @@ class _MyAppState extends State<MyApp> {
     width = MediaQuery.of(context).size.width;
     return GetMaterialApp(
       darkTheme: ThemeData(
-        // fontFamily: "Dosis-Font",
         colorScheme: ColorScheme.fromSeed(
           seedColor: pColor,
           brightness: Brightness.dark,
@@ -59,6 +58,41 @@ class _MyAppState extends State<MyApp> {
             color: ColorScheme.fromSeed(
               seedColor: pColor,
               brightness: Brightness.dark,
+            ).inversePrimary.withOpacity(.2),
+          ),
+        ),
+      ),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: pColor,
+          brightness: Brightness.light,
+        ),
+        iconButtonTheme: const IconButtonThemeData(
+          style: ButtonStyle(
+            elevation: WidgetStatePropertyAll(1),
+            foregroundColor: WidgetStatePropertyAll(Colors.white),
+          ),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          foregroundColor: ColorScheme.fromSeed(
+            seedColor: pColor,
+            brightness: Brightness.light,
+          ).inversePrimary,
+          backgroundColor: ColorScheme.fromSeed(
+            seedColor: pColor,
+            brightness: Brightness.light,
+          ).primary,
+        ),
+        chipTheme: ChipThemeData(
+          elevation: 6,
+          shadowColor: ColorScheme.fromSeed(
+            seedColor: pColor,
+            brightness: Brightness.light,
+          ).inversePrimary.withOpacity(.4),
+          side: BorderSide(
+            color: ColorScheme.fromSeed(
+              seedColor: pColor,
+              brightness: Brightness.light,
             ).inversePrimary.withOpacity(.2),
           ),
         ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '/utils/fetch_code.dart';
-import '/utils/text_scale.dart';
 import '/Data/categories.dart';
 import '/main.dart';
 import 'all_wallpapers.dart';
@@ -166,7 +165,6 @@ class _HomeState extends State<Categories> {
                                     fontSize: 19,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                  textScaleFactor: textScaleFactor(context),
                                 ),
                               ),
                             ],

@@ -89,7 +89,6 @@ Future<WallPaper> getWallByID(String idU) async {
       .then(
     (http.Response response) {
       final resp = json.decode(response.body)["data"];
-      print(response.body);
       wall = WallPaper(
         id: resp["id"].toString(),
         url: resp["url"].toString(),
@@ -131,7 +130,6 @@ Future<List<WallPaper>> getWallsByQuery(
       .then(
     (http.Response response) {
       final resp = json.decode(response.body);
-      print(response.body);
       for (int i = 0; i < (resp["data"].length as int); i++) {
         wallsS.add(
           WallPaper(
@@ -198,30 +196,14 @@ void main() async {
   // Test categoryDataFetcher function
   List<WallPaper> categoryWallpapers =
       await categoryDataFetcher('nature', 'search', 100, 100, 1);
-  print('Category Wallpapers:');
-  for (var wallpaper in categoryWallpapers) {
-    print(wallpaper.url);
-  }
 
   // Test getData function
   List<WallPaper> topWallpapers = await getData('toplist', 100, 100, 1);
-  print('Top Wallpapers:');
-  for (var wallpaper in topWallpapers) {
-    print(wallpaper.url);
-  }
 
   // Test getWallsByQuery function
   List<WallPaper> queryWallpapers = await getWallsByQuery('abstract', 100, 100);
-  print('Query Wallpapers:');
-  for (var wallpaper in queryWallpapers) {
-    print(wallpaper.url);
-  }
 
   // Test getWallsByQueryPage function
   List<WallPaper> queryPageWallpapers =
       await getWallsByQueryPage('city', 100, 100, 1);
-  print('Query Page Wallpapers:');
-  for (var wallpaper in queryPageWallpapers) {
-    print(wallpaper.url);
-  }
 }

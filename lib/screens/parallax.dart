@@ -1,18 +1,16 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:parallax_cards/parallax_cards.dart';
 
-class ParallaxScreen extends StatefulWidget {
-  const ParallaxScreen({super.key});
+class DesktopWallpapers extends StatefulWidget {
+  const DesktopWallpapers({super.key});
 
   @override
-  State<ParallaxScreen> createState() => _ParallaxScreenState();
+  State<DesktopWallpapers> createState() => _DesktopWallpapersState();
 }
 
-class _ParallaxScreenState extends State<ParallaxScreen> {
+class _DesktopWallpapersState extends State<DesktopWallpapers> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,9 +44,9 @@ class _ParallaxScreenState extends State<ParallaxScreen> {
               children: [
                 Container(
                   height: 1,
-                  decoration: const BoxDecoration(boxShadow: [
+                  decoration: BoxDecoration(boxShadow: [
                     BoxShadow(
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                       spreadRadius: 30,
                       blurRadius: 30,
                       offset: Offset.zero,
@@ -75,7 +73,10 @@ class _ParallaxScreenState extends State<ParallaxScreen> {
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall
-                                  ?.copyWith(color: Colors.black),
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary),
                             ),
                           ),
                         ),
@@ -112,7 +113,10 @@ class _ParallaxScreenState extends State<ParallaxScreen> {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(.9),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .inversePrimary
+                              .withOpacity(.9),
                           spreadRadius: 40,
                           blurRadius: 30,
                           offset: Offset.zero,
