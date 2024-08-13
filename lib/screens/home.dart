@@ -1,19 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:wallpaper_app/screens/parallax.dart';
-import '/models/get_controllers.dart';
-import 'package:wallpaper_app/utils/fetch_code.dart';
-import 'all_wallpapers.dart';
-import 'category.dart';
-import 'settings.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:wallpaper_app/screens/favorites.dart';
+import 'package:wallpaper_app/screens/settings.dart';
+import '../utils/tab_control.dart';
+import 'desktop_wallpaper.dart';
+import 'mobile_wallpaper.dart';
 
-List screens = [
-  AllWallpapers(title: "Wallpaper Android", requestType: RequestType.curated),
-  const Categories(),
-  const SettingsScreen(),
-];
+NavigationController navigationController = Get.put(NavigationController());
+final PageController pageController = PageController();
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -23,9 +19,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  NavigationController navigationController = Get.put(NavigationController());
-  final PageController pageController = PageController();
-
   @override
   void initState() {
     super.initState();
@@ -47,109 +40,49 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
       body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
-          AllWallpapers(
-            title: "Lush Layers",
-            requestType: RequestType.curated,
-          ),
-          const Categories(),
-          const DesktopWallpapers(),
-          const SettingsScreen()
+          const MobileWallpaper(),
+          DesktopWallpaper(),
+          const FavoritesScreen(),
+          const SettingsScreen(),
         ],
         onPageChanged: (index) {
           navigationController.selectedIndex!.value = index;
         },
       ),
-      bottomNavigationBar: Obx(() {
-        return BottomNavigationBar(
-          selectedFontSize: Theme.of(context).textTheme.bodyMedium!.fontSize!,
-          showUnselectedLabels: false,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: navigationController.selectedIndex!.value,
-          selectedIconTheme: IconThemeData(
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          unselectedIconTheme: IconThemeData(
-            color: Theme.of(context).colorScheme.inverseSurface,
-          ),
-          selectedLabelStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          onTap: (value) {
-            pageController.jumpToPage(value);
-            navigationController.navigate(value);
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: navigationController.selectedIndex!.value == 0
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 3,
-                ),
-                child: const Icon(Iconsax.image4),
+      bottomNavigationBar: SafeArea(
+        child: Obx(() {
+          return SalomonBottomBar(
+            selectedItemColor: Theme.of(context).listTileTheme.iconColor,
+            currentIndex: navigationController.selectedIndex!.value,
+            onTap: (index) {
+              pageController.jumpToPage(index);
+              navigationController.navigate(index);
+            },
+            items: [
+              SalomonBottomBarItem(
+                icon: const Icon(CupertinoIcons.compass),
+                title: const Text("Explore"),
               ),
-              label: "Home",
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: navigationController.selectedIndex!.value == 1
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 3,
-                ),
-                child: const Icon(Iconsax.category_2),
+              SalomonBottomBarItem(
+                icon: const Icon(CupertinoIcons.device_laptop),
+                title: const Text("Desktop"),
               ),
-              label: "Category",
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: navigationController.selectedIndex!.value == 2
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 3,
-                ),
-                child: const Icon(CupertinoIcons.device_desktop),
+              SalomonBottomBarItem(
+                icon: const Icon(CupertinoIcons.square_favorites_alt),
+                title: const Text("Favorites"),
               ),
-              label: "Desktop",
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: navigationController.selectedIndex!.value == 3
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 3,
-                ),
-                child: const Icon(Iconsax.security_user4),
+              SalomonBottomBarItem(
+                icon: const Icon(CupertinoIcons.settings),
+                title: const Text("Settings"),
               ),
-              label: "Me",
-            ),
-          ],
-        );
-      }),
+            ],
+          );
+        }),
+      ),
     );
   }
 }

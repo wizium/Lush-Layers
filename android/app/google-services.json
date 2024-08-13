@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "945849560057",
+    "project_id": "lush-layers-aace9",
+    "storage_bucket": "lush-layers-aace9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945849560057:android:f7884daa9e350e4fc9ab28",
+        "android_client_info": {
+          "package_name": "com.wizium.lushlaye"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945849560057-jdhhc11jpvjfp2t3q5oc3lnug038tr37.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wizium.lushlaye",
+            "certificate_hash": "55f3189cbbc33b4923aec08f038a0147f75eba9e"
+          }
+        },
+        {
+          "client_id": "945849560057-p1pmpjpok5bi1haffefi0tide097114e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjpq3WgSLR5BETxTWA1RcgyW6kYWp75Fs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945849560057-p1pmpjpok5bi1haffefi0tide097114e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "945849560057-jgsu546bm6hjgmfu0h72ftik4nss1tdh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wallpaperApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945849560057:android:55a441240ad44137c9ab28",
+        "android_client_info": {
+          "package_name": "com.wizium.lushlayers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945849560057-p1pmpjpok5bi1haffefi0tide097114e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjpq3WgSLR5BETxTWA1RcgyW6kYWp75Fs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945849560057-p1pmpjpok5bi1haffefi0tide097114e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "945849560057-jgsu546bm6hjgmfu0h72ftik4nss1tdh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wallpaperApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

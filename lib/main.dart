@@ -1,33 +1,30 @@
 import 'dart:convert';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:json_theme/json_theme.dart';
-import 'Data/categories.dart';
-import 'models/image_list.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:wallpaper_app/utils/settings.dart';
 import 'screens/home.dart';
 
-ImageListMethods imageList = ImageListMethods(images: imagesList);
-ImageListMethods recommendedImage = ImageListMethods(images: recommendedImages);
-late double height;
-late double width;
-ThemeData? ligthTheme;
+ThemeData? lightTheme;
 ThemeData? darkTheme;
-
+Box? settingsBox;
+Settings settings = Get.put(Settings());
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  Hive.init((await getApplicationDocumentsDirectory()).path);
+  settingsBox = await Hive.openBox("settings");
   final lThemeStr = await rootBundle.loadString('assets/light_theme.json');
   final lThemeJson = jsonDecode(lThemeStr);
-  ligthTheme = ThemeDecoder.decodeThemeData(lThemeJson)!;
+  lightTheme = ThemeDecoder.decodeThemeData(lThemeJson)!;
   final dThemeStr = await rootBundle.loadString('assets/dark_theme.json');
   final dThemeJson = jsonDecode(dThemeStr);
   darkTheme = ThemeDecoder.decodeThemeData(dThemeJson)!;
-
   runApp(const MyApp());
-
-  recommendedImage.initialize();
-  imageList.initialize();
 }
 
 class MyApp extends StatefulWidget {
@@ -39,12 +36,19 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
+    settings.themeStateUpdate();
+    settings.proStateUpdate();
+    settings.qualityStateUpdate();
     return GetMaterialApp(
-      darkTheme: darkTheme,
-      theme: ligthTheme,
-      themeMode: ThemeMode.dark,
+      darkTheme: darkTheme!.copyWith(
+        listTileTheme:
+            ListTileThemeData(iconColor: darkTheme!.colorScheme.primary),
+      ),
+      theme: lightTheme!.copyWith(
+        listTileTheme:
+            ListTileThemeData(iconColor: lightTheme!.colorScheme.secondary),
+      ),
+      themeMode: settings.dark.value ? ThemeMode.dark : ThemeMode.light,
       home: const Home(),
       debugShowCheckedModeBanner: false,
     );
