@@ -5,21 +5,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_app/config.dart';
 import 'package:wallpaper_app/screens/search.dart';
 import 'package:wallpaper_app/screens/wallpaper_preview.dart';
 import '../Data/wallheaven.dart';
 import '../main.dart';
-import 'no_image.dart';
 
 class DesktopWallpaper extends StatefulWidget {
   final bool onHomeScreen;
   final String? searchQuery;
   final String deviceType;
 
-  DesktopWallpaper({
+  const DesktopWallpaper({
     super.key,
     this.onHomeScreen = true,
     this.searchQuery,
@@ -97,6 +95,7 @@ class _DesktopWallpaperState extends State<DesktopWallpaper>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+      
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: widget.onHomeScreen
           ? FloatingActionButton(
@@ -186,7 +185,8 @@ class _DesktopWallpaperState extends State<DesktopWallpaper>
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(),
                                   color: Colors.black.withOpacity(.5),
                                 ),
                                 height: 250,
@@ -194,7 +194,9 @@ class _DesktopWallpaperState extends State<DesktopWallpaper>
                                   borderRadius: BorderRadius.circular(10),
                                   child: CachedNetworkImage(
                                     filterQuality: FilterQuality.high,
-                                    imageUrl:settings.quality.value?wallpaper.source: wallpaper.thumbNail,
+                                    imageUrl: settings.quality.value
+                                        ? wallpaper.source
+                                        : wallpaper.thumbNail,
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) =>
                                         Shimmer.fromColors(

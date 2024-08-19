@@ -43,11 +43,11 @@ class _HomeState extends State<Home> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: [
-          const MobileWallpaper(),
+        children: const [
+          MobileWallpaper(),
           DesktopWallpaper(),
-          const FavoritesScreen(),
-          const SettingsScreen(),
+          FavoritesScreen(),
+          SettingsScreen(),
         ],
         onPageChanged: (index) {
           navigationController.selectedIndex!.value = index;

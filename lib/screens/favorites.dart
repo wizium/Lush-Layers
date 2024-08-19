@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_app/Data/wallheaven.dart';
 import 'package:wallpaper_app/config.dart';
@@ -95,12 +94,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                   ),
                                 );
                               },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(.5),
-                                  ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(),
+                                  color: Colors.black.withOpacity(.5),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
                                   child: Stack(
                                     fit: StackFit.expand,
                                     children: [
@@ -161,7 +162,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                   ),
                                 );
                               },
-                              child: SizedBox(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.black.withOpacity(.5),
+                                ),
                                 height: 250,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -216,15 +222,23 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         const Text(
                           "You should login first in order to sync Favorites.",
                         ),
-                        SizedBox(
-                          height: 40,
-                          child: FilledButton(
-                            onPressed: () {
-                              navigationController.navigate(3);
-                              pageController.jumpToPage(3);
-                            },
-                            child: const Text(
-                              "Login",
+                        Padding(
+                          padding: const EdgeInsets.all(gPadding),
+                          child: SizedBox(
+                            width: Get.width,
+                            height: 40,
+                            child: FilledButton(
+                              onPressed: () {
+                                navigationController.navigate(3);
+                                pageController.jumpToPage(3);
+                              },
+                              child: Text(
+                                "Login",
+                                style: const TextStyle().copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary,
+                                ),
+                              ),
                             ),
                           ),
                         )

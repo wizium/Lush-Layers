@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
@@ -36,11 +35,12 @@ class WallHeavenWallpapers {
           title: wallpaper["id"].toUpperCase(),
           height: height,
           width: width,
-          isPortrait: height > width,
+          isPortrait: (height > width) ? true : false,
           thumbNail: wallpaper["thumbs"]
               [deviceType == DeviceType.mobile ? "original" : "large"],
           source: wallpaper["path"],
-          ratio: double.parse(wallpaper["ratio"]));
+          ratio: double.parse(wallpaper["ratio"]),
+          colors: wallpaper["colors"]);
     }).toList();
 
     int totalWallpapers = data["meta"]["total"];
@@ -64,7 +64,7 @@ class WallHeavenWallpapers {
       'sorting': 'views',
       'page': '$page',
       "ratios": "landscape",
-      "ai_art_filter": "0",
+      "ai_art_filter": "1",
       "order": "desc"
     };
     params.addIf(deviceType == DeviceType.desktop, "ratios", "landscape");
@@ -108,7 +108,7 @@ class Wallpapers {
   String thumbNail;
   String source;
   double ratio;
-
+  List colors;
   Wallpapers({
     required this.title,
     required this.height,
@@ -117,6 +117,7 @@ class Wallpapers {
     required this.thumbNail,
     required this.source,
     required this.ratio,
+    required this.colors,
   });
 
   static Future<String> toJson(Wallpapers wallpaper) async {
@@ -128,6 +129,7 @@ class Wallpapers {
       'thumbNail': wallpaper.thumbNail,
       'source': wallpaper.source,
       'ratio': wallpaper.ratio,
+      "colors": wallpaper.colors
     });
   }
 
@@ -141,7 +143,8 @@ class Wallpapers {
           isPortrait: wallpaper["isPortrait"],
           thumbNail: wallpaper["thumbNail"],
           source: wallpaper["source"],
-          ratio: double.parse(wallpaper["ratio"].toString()));
+          ratio: double.parse(wallpaper["ratio"].toString()),
+          colors: wallpaper["colors"]);
     }).toList();
   }
 }

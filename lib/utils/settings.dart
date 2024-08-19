@@ -8,7 +8,7 @@ class Settings extends GetxController {
   RxBool dark = true.obs;
   RxBool quality = true.obs;
   qualityStateUpdate() async {
-    quality.value = settingsBox!.get("quality", defaultValue: true);
+    quality.value = settingsBox!.get("quality", defaultValue: false);
   }
 
   qualityStateSave(bool value) async {

@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_app/screens/no_image.dart';
 import 'package:wallpaper_app/screens/search.dart';
@@ -181,15 +180,19 @@ class _MobileWallpaperState extends State<MobileWallpaper>
                                 ),
                               );
                             },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(.5),
-                                ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.black.withOpacity(.5),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
                                 child: CachedNetworkImage(
                                   filterQuality: FilterQuality.high,
-                                  imageUrl:settings.quality.value?wallpaper.source: wallpaper.thumbNail,
+                                  imageUrl: settings.quality.value
+                                      ? wallpaper.source
+                                      : wallpaper.thumbNail,
                                   fit: BoxFit.cover,
                                   placeholder: (context, url) =>
                                       Shimmer.fromColors(

@@ -31,40 +31,32 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  # async_wallpaper: ^2.0.3
-  cupertino_icons: ^1.0.2
-  loading_animation_widget: ^1.2.0+4
-  gallery_saver: ^2.3.2
-  get: ^4.6.5
-  http: ^0.13.6
-  iconsax: ^0.0.8
-  shimmer: ^3.0.0
-  parallax_cards: ^1.0.2
-  json_theme: ^6.5.0+1
-  palette_generator: ^0.3.3+4
-  share_plus: ^10.0.0
-  fluttertoast: ^8.2.6
-  salomon_bottom_bar: ^3.3.2
-  image_gallery_saver: ^2.0.3
-  path_provider: ^2.1.4
-  permission_handler: ^11.3.1
-  wallpaper_manager_plus: ^0.0.3
-  flutter_cache_manager: ^3.3.1
-  super_tooltip: ^2.0.8
-  lottie: ^3.0.0
-  firebase_core: ^3.3.0
-  google_sign_in: ^6.2.1
-  firebase_auth: ^5.1.4
-  cloud_firestore: ^5.2.1
-  hive: ^2.2.3
-  url_launcher: ^6.3.0
-  in_app_review: ^2.0.9
-  cached_network_image: ^3.3.1
-  flutter_staggered_grid_view: ^0.7.0
-  widget_zoom: ^0.0.4
+  cupertino_icons: 
+  loading_animation_widget: 
+  gallery_saver: 
+  get: 
+  http: 
+  shimmer: 
+  json_theme: 
+  share_plus: 
+  fluttertoast: 
+  salomon_bottom_bar:
+  image_gallery_saver: 
+  path_provider: 
+  permission_handler: 
+  wallpaper_manager_plus: 
+  flutter_cache_manager: 
+  super_tooltip: 
+  firebase_core: 
+  google_sign_in: 
+  firebase_auth: 
+  cloud_firestore: 
+  hive: 
+  url_launcher:
+  in_app_review: 
+  cached_network_image: 
+  flutter_staggered_grid_view: 
+  webview_flutter:
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -103,10 +95,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-    # - family: Dosis-Font
-    #   fonts:
-    #     - asset: font\Dosis-Font.ttf
+  fonts:
+    - family: AkayaKanadaka
+      fonts:
+        - asset: assets\font\AkayaKanadaka-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

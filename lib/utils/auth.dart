@@ -1,8 +1,12 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart';
 import 'package:wallpaper_app/main.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -32,6 +36,21 @@ class SignIn {
           Timestamp.fromDate(DateTime.now().subtract(const Duration(days: 1))),
         );
       });
+      try {
+        final response = await get(
+          Uri.parse(
+            firebaseAuth.currentUser!.photoURL!,
+          ),
+        );
+        if (response.statusCode == 200) {
+          final file = File("${downloadPath!.path}/avatar.png");
+          await file.writeAsBytes(response.bodyBytes);
+        } else {
+          log('Failed to download image');
+        }
+      } catch (e) {
+        log('Error: $e');
+      }
       Fluttertoast.showToast(msg: 'SignIn Successful');
     } catch (e) {
       await firebaseAuth.signOut();
@@ -56,8 +75,6 @@ class SignIn {
             'Are you sure you want to Log Out?',
             textAlign: TextAlign.center,
           ),
-          // contentTextStyle: TextStyle(
-          // ),
           actionsAlignment: MainAxisAlignment.spaceBetween,
           actions: [
             SizedBox(

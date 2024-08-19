@@ -96,6 +96,9 @@ class SearchScreen extends StatelessWidget {
                           );
                   },
                   enableSuggestions: true,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(15),
                     filled: true,
@@ -125,6 +128,7 @@ class SearchScreen extends StatelessWidget {
                 const SizedBox(height: 5),
                 Wrap(
                   spacing: 8,
+                  runSpacing: 4,
                   children: wallpaperCategories.map((search) {
                     return InkWell(
                       onTap: () {

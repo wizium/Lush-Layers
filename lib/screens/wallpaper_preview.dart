@@ -7,9 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 import 'package:wallpaper_app/Data/favorites.dart';
@@ -33,17 +31,7 @@ class PreviewWallpaper extends StatefulWidget {
   State<PreviewWallpaper> createState() => _PreviewWallpaperState();
 }
 
-Future<PaletteGenerator> _updatePaletteGenerator(
-    String imageUrl, int width, int height) async {
-  return await PaletteGenerator.fromImageProvider(
-    NetworkImage(imageUrl),
-    size: Size(width + .0, height + .0),
-    maximumColorCount: 10,
-  );
-}
-
 class _PreviewWallpaperState extends State<PreviewWallpaper> {
-  List colors = [];
   bool isVisible = true;
   SuperTooltipController toolTipController = SuperTooltipController();
   @override
@@ -61,44 +49,59 @@ class _PreviewWallpaperState extends State<PreviewWallpaper> {
       child: Builder(builder: (context) {
         return Scaffold(
           body: Stack(
+            fit: StackFit.expand,
             alignment: Alignment.bottomCenter,
             children: [
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  child: CachedNetworkImage(
-                    imageUrl: widget.wallpaper.source,
-                    fit: widget.wallpaper.isPortrait
-                        ? BoxFit.fitHeight
-                        : BoxFit.fitWidth,
-                    width: Get.width,
-                    height: Get.height,
-                    filterQuality: FilterQuality.high,
-                    placeholder: (context, url) => Center(
-                      child: LoadingAnimationWidget.discreteCircle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        size: 120,
-                      ),
-                    ),
-                    errorWidget: (context, url, error) =>
-                        const SomethingWrongScreen(),
-                    imageBuilder: (context, imageProvider) {
-                      return InteractiveViewer(
-                        child: Image(
-                          image: imageProvider,
-                          fit: widget.wallpaper.isPortrait
-                              ? BoxFit.fitHeight
-                              : BoxFit.fitWidth,
-                        ),
-                      );
-                    },
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    end: Alignment.bottomCenter,
+                    begin: Alignment.topCenter,
+                    colors: widget.wallpaper.colors.map((e) {
+                      return HexColor.fromHex(e);
+                    }).toList(),
                   ),
-                  onTap: () {
-                    isVisible = !isVisible;
-                    setState(() {});
-                  },
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                  child: Center(
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      child: CachedNetworkImage(
+                        imageUrl: widget.wallpaper.source,
+                        // fit: widget.wallpaper.isPortrait
+                        //     ? BoxFit.fitHeight
+                        //     : BoxFit.fitWidth,
+                        fit: BoxFit.cover,
+                        // width: Get.width,
+                        // height: Get.height,
+                        filterQuality: FilterQuality.high,
+                        placeholder: (context, url) => Center(
+                          child: LoadingAnimationWidget.discreteCircle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            size: 120,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            const SomethingWrongScreen(),
+                        imageBuilder: (context, imageProvider) {
+                          return InteractiveViewer(
+                            child: Image(
+                              image: imageProvider,
+                              fit: widget.wallpaper.isPortrait
+                                  ? BoxFit.cover
+                                  : BoxFit.fitWidth,
+                            ),
+                          );
+                        },
+                      ),
+                      onTap: () {
+                        isVisible = !isVisible;
+                        setState(() {});
+                      },
+                    ),
+                  ),
                 ),
               ),
               SafeArea(
@@ -123,7 +126,7 @@ class _PreviewWallpaperState extends State<PreviewWallpaper> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
-                              Iconsax.arrow_left_2,
+                              Icons.arrow_back_ios_new_rounded,
                               color: Theme.of(context).colorScheme.surface,
                             ),
                           ),
@@ -189,7 +192,7 @@ class _PreviewWallpaperState extends State<PreviewWallpaper> {
                                                       "${widget.wallpaper.height} x ${widget.wallpaper.width}",
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .bodyLarge!
+                                                          .titleMedium!
                                                           .merge(
                                                             const TextStyle(
                                                               color:
@@ -202,7 +205,7 @@ class _PreviewWallpaperState extends State<PreviewWallpaper> {
                                                       "JPG",
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .bodyLarge!
+                                                          .titleMedium!
                                                           .copyWith(
                                                             color: Colors.black,
                                                           ),
@@ -245,8 +248,7 @@ class _PreviewWallpaperState extends State<PreviewWallpaper> {
                                                     context: context,
                                                     builder: (context) {
                                                       return infoWidget(
-                                                          widget.wallpaper,
-                                                          colors);
+                                                          widget.wallpaper);
                                                     },
                                                   );
                                                 },
@@ -547,7 +549,7 @@ class _PreviewWallpaperState extends State<PreviewWallpaper> {
   }
 }
 
-Widget infoWidget(Wallpapers wallpaper, List colors) {
+Widget infoWidget(Wallpapers wallpaper) {
   return SafeArea(
     child: BottomSheet(
       enableDrag: false,
@@ -683,56 +685,7 @@ Widget infoWidget(Wallpapers wallpaper, List colors) {
                     const SizedBox(
                       height: 10,
                     ),
-                    colors.isEmpty
-                        ? FutureBuilder(
-                            future: _updatePaletteGenerator(
-                              wallpaper.thumbNail,
-                              wallpaper.height,
-                              wallpaper.width,
-                            ),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Expanded(
-                                  child: Center(
-                                    child: LoadingAnimationWidget
-                                        .threeArchedCircle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      size: 50,
-                                    ),
-                                  ),
-                                );
-                              } else if (snapshot.hasError) {
-                                return Center(
-                                  child: Card.outlined(
-                                    margin: const EdgeInsets.all(gPadding),
-                                    child: SizedBox(
-                                      height: 100,
-                                      width: Get.width,
-                                      child: const Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Sorry something went wrong!",
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                if (colors.isEmpty) {
-                                  colors.addAll(snapshot.data!.colors);
-                                }
-                                return ColorsGrid(colors: colors);
-                              }
-                            },
-                          )
-                        : ColorsGrid(colors: colors),
+                    ColorsGrid(colors: wallpaper.colors),
                   ],
                 ),
               ),
@@ -750,44 +703,62 @@ class ColorsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 5,
-        childAspectRatio: 1.18,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 5,
-      ),
-      itemCount: colors.length,
-      itemBuilder: (
-        context,
-        index,
-      ) {
-        return InkWell(
-          onTap: () {
-            Clipboard.setData(
-              ClipboardData(
-                text: "#${colors[index].value.toRadixString(16).toUpperCase()}",
-              ),
-            );
-            Fluttertoast.showToast(
-              msg: "Color copied to clipboard",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: colors[index],
-              shape: BoxShape.circle,
-              border: Border.all(
-                width: .1,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ListView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            Center(
+              child: Wrap(
+                spacing: 5,
+                runSpacing: 5,
+                children: colors.map((color) {
+                  return SizedBox(
+                    width: (constraints.maxWidth / 5) - 10,
+                    height: 115,
+                    child: InkWell(
+                      onTap: () {
+                        Clipboard.setData(
+                          ClipboardData(text: color),
+                        );
+                        Fluttertoast.showToast(
+                          msg: "Color copied to clipboard",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: HexColor.fromHex(color),
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(width: .1),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
-          ),
+          ],
         );
       },
     );
   }
+}
+
+extension HexColor on Color {
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
+  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+      '${alpha.toRadixString(16).padLeft(2, '0')}'
+      '${red.toRadixString(16).padLeft(2, '0')}'
+      '${green.toRadixString(16).padLeft(2, '0')}'
+      '${blue.toRadixString(16).padLeft(2, '0')}';
 }

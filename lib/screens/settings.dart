@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:wallpaper_app/main.dart';
 import '../config.dart';
 import '../utils/auth.dart';
 import '../utils/cache_handle.dart';
+import '../utils/donations.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -58,8 +61,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       if (firebaseAuth.currentUser != null) ...[
                         CircleAvatar(
                           radius: 60,
-                          backgroundImage: NetworkImage(
-                            firebaseAuth.currentUser!.photoURL!,
+                          backgroundImage: FileImage(
+                            File("${downloadPath!.path}/avatar.png"),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -69,6 +72,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 TextStyle(
                                   color:
                                       Theme.of(context).listTileTheme.iconColor,
+                                  fontFamily: "AkayaKanadaka",
                                 ),
                               ),
                         ),
@@ -154,10 +158,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   leading: const Icon(
                     Icons.workspace_premium_rounded,
                   ),
-                  title: const Text('Upgrade to Lush Layers Pro'),
-                  subtitle:
-                      const Text('Unlock the best Lush Layers experience.'),
-                  onTap: () {},
+                  title: const Text('Donate Us!'),
+                  subtitle: const Text(
+                      'Donate Us to keep this app ad free for longer.'),
+                  onTap: () async {
+                    //   showModalBottomSheet(
+                    //     context: context,
+                    //     isScrollControlled: true,
+                    //     builder: (BuildContext context) {
+                    //       return const PaymentsBottomSheet();
+                    //     },
+                    //   );
+
+                    Get.to(()=>
+                      const PaymentsBottomSheet(),
+                    );
+                  },
                 ),
               ),
               ListTile(
@@ -267,12 +283,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                     children: [
-                      ElevatedButton(
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "This is a fermium wallpaper app. Made using wallheaven.cc api. All wallpaper are property of their respective owners.",
+                        style: TextStyle(
+                          fontFamily: "AkayaKanadaka",
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      OutlinedButton(
                         onPressed: () {
                           aboutMeDialog();
                         },
                         child: const Text("About Developer"),
-                      )
+                      ),
                     ],
                   );
                 },
